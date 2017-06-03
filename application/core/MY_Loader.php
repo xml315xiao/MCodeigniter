@@ -110,13 +110,19 @@ class MY_Loader extends MX_Loader
             //load service files
             foreach ($this->_ci_services_paths as $service_path)
             {
-
-                if ( ! file_exists($service_path.'services/'.$path.$service.'.php'))
+                if ( file_exists($service_path. 'modules'. DIRECTORY_SEPARATOR. $this->_module. DIRECTORY_SEPARATOR. 'services'. DIRECTORY_SEPARATOR. $path. $service. '.php'))
+                {
+                    include_once ($service_path. 'modules'. DIRECTORY_SEPARATOR. $this->_module. DIRECTORY_SEPARATOR. 'services'. DIRECTORY_SEPARATOR. $path. $service. '.php');
+                }
+                elseif ( file_exists($service_path. 'services'. DIRECTORY_SEPARATOR. $path. $service. '.php'))
+                {
+                    //default path application/services/
+                    include_once ($service_path. 'services'. DIRECTORY_SEPARATOR. $path. $service. '.php');
+                }
+                else
                 {
                     continue;
                 }
-                //default path application/services/
-                include_once($service_path.'services/'.$path.$service.'.php');
 
                 $CI = &get_instance();
 

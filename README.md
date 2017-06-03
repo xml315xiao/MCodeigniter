@@ -10,4 +10,4 @@ Modular Extensions installation with HMVC
 Add Extensions Service
 ------------------
 1. 修改Object_name为默认，不强制小写
-
+2. service支持分模块加载

@@ -21,6 +21,6 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$this->load->service('User_service');
-		print_r($this->User_service->test());
+        $this->load->library('redis');
 	}
 }

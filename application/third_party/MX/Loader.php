@@ -197,6 +197,8 @@ class MX_Loader extends CI_Loader
 	/** Load a module model **/
 	public function model($model, $object_name = NULL, $connect = FALSE)
 	{
+        class_exists('CI_Model', FALSE) OR load_class('Model', 'core');
+
 		if (is_array($model)) return $this->models($model);
 
 		($_alias = $object_name) OR $_alias = basename($model);
@@ -214,8 +216,6 @@ class MX_Loader extends CI_Loader
 		}
 		else
 		{
-			class_exists('CI_Model', FALSE) OR load_class('Model', 'core');
-
 			if ($connect !== FALSE && ! class_exists('CI_DB', FALSE))
 			{
 				if ($connect === TRUE) $connect = '';

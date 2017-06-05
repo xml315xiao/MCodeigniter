@@ -282,3 +282,28 @@ if ( ! function_exists('extract_field'))
         return $tamp;
     }
 }
+
+if ( ! function_exists('cut_str'))
+{
+    /**
+     * 截取字符串
+     * @param string $haystack
+     * @param string $path
+     * @param string $format
+     * @return string
+     */
+    function cutstr($haystack, $path, $format){
+        switch($format){
+            case 'xml' :
+                $obj = simplexml_load_string($haystack);
+                return eval('return $obj->'.$path.';');
+            case 'json' :
+                $obj = json_decode($haystack);
+                return eval('return $obj->'.$path.';');
+            default :
+                if(strpos($haystack, $path) === FALSE) return '';
+                return strstr(substr($haystack, strpos($haystack, $path) + strlen($path)), $format, true);
+        }
+    }
+
+}

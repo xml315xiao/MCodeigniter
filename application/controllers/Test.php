@@ -25,7 +25,7 @@ class Test extends CI_Controller
          *
          */
         $this->load->helper('util');
-        header('content-type:text/plain;charset=utf-8');
+//        header('content-type:text/plain;charset=utf-8');
 //        print_r(curl_request('http://www.baidu.com'));
         $this->load->library('curl');
 //        print_r($this->curl->simple_get('http://www.baidu.com'));
@@ -33,6 +33,16 @@ class Test extends CI_Controller
 //        $this->curl->simple_post('user/test');
 
 //        print_r(fetch_ip_info(random_ip()));
+
+//        $this->load->helper('captcha');
+//        $result = create_captcha();
+//        echo '<img src="'. $result['image']. '">';
+
+        /*
+         * ----------------------------------------
+         *
+         * ----------------------------------------
+         */
 
     }
 

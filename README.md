@@ -4,6 +4,7 @@ MCodeigniter
 2. 添加业务逻辑层service (http://www.cnblogs.com/SLchuck/p/5804555.html)
 3. 添加Redis扩展库 (https://github.com/joelcox/codeigniter-redis)
 4. 添加Elegant-ORM扩展 (https://github.com/nazieb/elegant-orm)
+5. 添加curl_helper助手 & curl单文件类库 (https://github.com/philsturgeon/codeigniter-curl.git)
 
 Modular Extensions installation with HMVC
 ------------------
@@ -20,4 +21,8 @@ Add Library Redis
 
 Add Extension of Elegant-ORM
 ------------------
+
+Add Extension of curl
+------------------
+1. 添加curl_request简化版
 

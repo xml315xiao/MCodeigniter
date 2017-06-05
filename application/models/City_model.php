@@ -1,7 +1,7 @@
 <?php
 class City_model extends CI_Model
 {
-    protected $_table = 'city';
+    protected $_table = 'customer';
 
     public function __construct()
     {

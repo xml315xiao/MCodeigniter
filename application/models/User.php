@@ -2,5 +2,6 @@
 
 class User extends Elegant\Model
 {
-    protected $table = 'city';
+    protected $table = 'customer';
+    protected $primary = 'customer_id';
 }

@@ -23,10 +23,10 @@ class Welcome extends CI_Controller {
 		$this->load->service('User_service');
         $this->load->library('redis');
         $this->load->library('elegant-orm/elegant');
-        $this->load->model('City_model');
+//        $this->load->model('City_model');
 
 //        print_r($this->City_model);
-        $user = User::find(1);
-        print_r($user->Name);
+        $user = User::find(1001);
+        print_r($user->customer_name);
 	}
 }

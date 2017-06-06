@@ -6,7 +6,7 @@ class Test extends MY_Controller
 
     protected $model_file   = ['Customer_model'];
     protected $library_file = ['curl'];
-    protected $help_file    = ['util'];
+    protected $helper_file  = ['util', 'url'];
 
     public function index()
     {
@@ -67,13 +67,13 @@ class Test extends MY_Controller
         $res = $this->Customer_model->with_employee('fields:*count*')->get(1001);
         $this->load->model(['Employee_model', 'Office_model']);
 
-        $res = $this->Employee_model->where('gender', '男')->with_customer('fields:*count*')->order_by('employee_id', 'desc')->get_all();
+        $res = $this->Employee_model->where('gender', '男')->with_customer('fields:customer_name,customer_id|order_inside:customer_id desc')->get_all();
 
-        $res = $this->Customer_model->count_rows();
+//        $res = $this->Customer_model->count_rows();
 
-        echo '<pre>';
-        print_r($res);
-        echo '</pre>';
+//        echo '<pre>';
+//        print_r($res);
+//        echo '</pre>';
 //        $this->render_text();
 
 //        print_r($res->contact_name);
@@ -99,11 +99,16 @@ class Test extends MY_Controller
          */
 
 
+
     }
 
     public function running()
     {
-        $this->view('test/index')->render();
+        $this->load->library('breadcrumbs');
+        $this->breadcrumbs->push('首页', '/section');
+        $this->breadcrumbs->push('栏目', '/section/page');
+        $data = $this->breadcrumbs->show();
+        $this->render_text($data);
     }
 
 }

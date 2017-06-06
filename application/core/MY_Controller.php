@@ -57,10 +57,11 @@ class MY_Controller extends CI_Controller
         $this->load->view($view, $data);
     }
 
-    protected function render_text()
+    protected function render_text($string)
     {
         $this->output->enable_profiler(false)
-            ->set_content_type('text/plain');
+            ->set_content_type('text/plain')
+            ->set_output($string);
     }
 
     protected function render_json($json)

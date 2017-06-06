@@ -5,7 +5,4 @@ class Customer_model extends MY_Model
 {
     protected $_table = '';
     protected $primary_key = 'customer_id';
-
-
-
 }

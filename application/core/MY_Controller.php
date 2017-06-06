@@ -41,9 +41,16 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    protected function render($data = [], $view = '')
+    protected function view($view)
     {
-        $view = !empty($view) ? $view : $this->router->fetch_class(). '/'. $this->router->fetch_method();
+        $this->use_view = $view;
+
+        return $this;
+    }
+
+    protected function render($data = [])
+    {
+        $view = !empty($this->use_view) ? $this->use_view : $this->router->fetch_class(). '/'. $this->router->fetch_method();
 
         $data = array_merge($data, $this->vars);
 

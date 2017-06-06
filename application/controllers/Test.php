@@ -98,8 +98,6 @@ class Test extends MY_Controller
          * ----------------------------------------
          */
 
-
-
     }
 
     public function running()
@@ -109,6 +107,24 @@ class Test extends MY_Controller
         $this->breadcrumbs->push('栏目', '/section/page');
         $data = $this->breadcrumbs->show();
         $this->render_text($data);
+    }
+
+    public function excel()
+    {
+        $this->load->library('phpexcel');
+        $this->load->library('phpexcel/iofactory');
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("title")
+            ->setDescription("description");
+
+        // Assign cell values
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'cell value here');
+
+        // Save it as an excel 2003 file
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel5');
+//        $objWriter->save("nameoffile.xls");
     }
 
 }

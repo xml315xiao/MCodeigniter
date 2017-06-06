@@ -9,6 +9,7 @@ MCodeigniter
                     https://github.com/avenirer/CodeIgniter-MY_Model)
 7. 编辑MY_controller基础类(https://github.com/lonnieezell/my_controller)
 8. 编辑breadcrumb库(https://github.com/nobuti/Codeigniter-breadcrumbs)
+9. 加载PHPExcel(https://github.com/bcit-ci/CodeIgniter/wiki/PHPExcel)
 
 
 Modular Extensions installation with HMVC

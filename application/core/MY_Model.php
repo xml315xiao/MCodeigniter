@@ -56,10 +56,6 @@
  *              Also, with $cache_prefix, you can prefix the name of the caches. by default any cache made by MY_Model starts with 'mm' + _ + "name chosen for cache"
  *          $this->delete_cache_on_save = FALSE
  *              If you use caching often and you don't want to be forced to delete cache manually, you can enable $this->delete_cache_on_save by setting it to TRUE. If set to TRUE the model will auto-delete all cache related to the model's table whenever you write/update/delete data from that table.
- *          $this->pagination_delimiters = array('<span>','</span>');
- *              If you know you will use the paginate() method, you can change the delimiters between the pages links
- *          $this->pagination_arrows = array('&lt;','&gt;');
- *              You can also change the way the previous and next arrows look like.
  *
  *
  * 			parent::__construct();
@@ -144,13 +140,6 @@ class MY_Model extends CI_Model
     protected $_cache = array();
     public $delete_cache_on_save = FALSE;
 
-    /*pagination*/
-    public $next_page;
-    public $previous_page;
-    public $all_pages;
-    public $pagination_delimiters;
-    public $pagination_arrows;
-
     /* validation */
     private $validated = TRUE;
     private $row_fields_to_update = array();
@@ -189,8 +178,6 @@ class MY_Model extends CI_Model
         $this->_set_connection();
         $this->_set_timestamps();
         $this->_fetch_table();
-        $this->pagination_delimiters = (isset($this->pagination_delimiters)) ? $this->pagination_delimiters : array('<span>','</span>');
-        $this->pagination_arrows = (isset($this->pagination_arrows)) ? $this->pagination_arrows : array('&lt;','&gt;');
         /* These below are implementation examples for before_create and before_update triggers.
         Their respective functions - add_creator() and add_updater() - can be found at the end of the model.
         They add user id on create and update. If you comment this out don't forget to do the same for the methods()
@@ -1819,127 +1806,6 @@ class MY_Model extends CI_Model
         return $this;
     }
 
-    /*
-     * HELPER FUNCTIONS
-     */
-
-    public function paginate($rows_per_page, $total_rows = NULL, $page_number = 1)
-    {
-        $this->load->helper('url');
-        $segments = $this->uri->total_segments();
-        $uri_array = $this->uri->segment_array();
-        $page = $this->uri->segment($segments);
-        if(is_numeric($page))
-        {
-            $page_number = $page;
-        }
-        else
-        {
-            $page_number = $page_number;
-            $uri_array[] = $page_number;
-            ++$segments;
-        }
-        $next_page = $page_number+1;
-        $previous_page = $page_number-1;
-
-        if($page_number == 1)
-        {
-            $this->previous_page = $this->pagination_delimiters[0].$this->pagination_arrows[0].$this->pagination_delimiters[1];
-        }
-        else
-        {
-            $uri_array[$segments] = $previous_page;
-            $uri_string = implode('/',$uri_array);
-            $this->previous_page = $this->pagination_delimiters[0].anchor($uri_string,$this->pagination_arrows[0]).$this->pagination_delimiters[1];
-        }
-        $uri_array[$segments] = $next_page;
-        $uri_string = implode('/',$uri_array);
-        if(isset($total_rows) && (ceil($total_rows/$rows_per_page) == $page_number))
-        {
-            $this->next_page = $this->pagination_delimiters[0].$this->pagination_arrows[1].$this->pagination_delimiters[1];
-        }
-        else
-        {
-            $this->next_page = $this->pagination_delimiters[0].anchor($uri_string, $this->pagination_arrows[1]).$this->pagination_delimiters[1];
-        }
-
-        $rows_per_page = (is_numeric($rows_per_page)) ? $rows_per_page : 10;
-
-        if(isset($total_rows))
-        {
-            if($total_rows!=0)
-            {
-                $number_of_pages = ceil($total_rows / $rows_per_page);
-                $links = $this->previous_page;
-                for ($i = 1; $i <= $number_of_pages; $i++) {
-                    unset($uri_array[$segments]);
-                    $uri_string = implode('/', $uri_array);
-                    $links .= $this->pagination_delimiters[0];
-                    $links .= (($page_number == $i) ? anchor($uri_string, $i) : anchor($uri_string . '/' . $i, $i));
-                    $links .= $this->pagination_delimiters[1];
-                }
-                $links .= $this->next_page;
-                $this->all_pages = $links;
-            }
-            else
-            {
-                $this->all_pages = $this->pagination_delimiters[0].$this->pagination_delimiters[1];
-            }
-        }
-
-
-        if(isset($this->_cache) && !empty($this->_cache))
-        {
-            $this->load->driver('cache');
-            $cache_name = $this->_cache['cache_name'].'_'.$page_number;
-            $seconds = $this->_cache['seconds'];
-            $data = $this->cache->{$this->cache_driver}->get($cache_name);
-        }
-
-        if(isset($data) && $data !== FALSE)
-        {
-            return $data;
-        }
-        else
-        {
-            $this->trigger('before_get');
-            $this->where();
-            $this->limit($rows_per_page, (($page_number-1)*$rows_per_page));
-            $data = $this->get_all();
-            if($data)
-            {
-                if(isset($cache_name) && isset($seconds))
-                {
-                    $this->cache->{$this->cache_driver}->save($cache_name, $data, $seconds);
-                    $this->_reset_cache($cache_name);
-                }
-                return $data;
-            }
-            else
-            {
-                return FALSE;
-            }
-        }
-    }
-
-    public function set_pagination_delimiters($delimiters)
-    {
-        if(is_array($delimiters) && sizeof($delimiters)==2)
-        {
-            $this->pagination_delimiters = $delimiters;
-        }
-        return $this;
-    }
-
-    public function set_pagination_arrows($arrows)
-    {
-        if(is_array($arrows) && sizeof($arrows)==2)
-        {
-            $this->pagination_arrows = $arrows;
-        }
-        return $this;
-    }
-
     /**
      * private function _fetch_table()
      *
@@ -2048,20 +1914,4 @@ class MY_Model extends CI_Model
         return $data;
     }
 
-    
-    /*
-    public function add_creator($data)
-    {
-    	$data['created_by'] = $_SESSION['user_id'];
-    	return $data;
-    }
-    */
-
-    /*
-    public function add_updater($data)
-    {
-	    $data['updated_by'] = $_SESSION['user_id'];
-	    return $data;
-    }
-    */
 }

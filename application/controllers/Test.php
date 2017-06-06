@@ -69,11 +69,11 @@ class Test extends MY_Controller
 
         $res = $this->Employee_model->where('gender', '男')->with_customer('fields:*count*')->order_by('employee_id', 'desc')->get_all();
 
+        $res = $this->Customer_model->count_rows();
 
         echo '<pre>';
         print_r($res);
         echo '</pre>';
-
 //        $this->render_text();
 
 //        print_r($res->contact_name);

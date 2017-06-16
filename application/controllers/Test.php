@@ -127,4 +127,17 @@ class Test extends MY_Controller
 //        $objWriter->save("nameoffile.xls");
     }
 
+    public function invite_code()
+    {
+        $this->load->library('PseudoCrypt');
+
+        $id = 12;
+
+        echo $hash = PseudoCrypt::hash($id, 6);
+
+        echo  "<hr/>";
+
+        echo PseudoCrypt::unhash($hash);
+    }
+
 }
